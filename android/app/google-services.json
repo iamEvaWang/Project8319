@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "223416020199",
+    "project_id": "lettersub-mobile-app",
+    "storage_bucket": "lettersub-mobile-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:223416020199:android:e221f33fa76bba34c60642",
+        "android_client_info": {
+          "package_name": "team6.lettersub_mobile_application"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCraIqIla5K2VkQP70-GL4eI5RVc9NOLEI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
