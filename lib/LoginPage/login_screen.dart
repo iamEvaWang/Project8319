@@ -90,18 +90,18 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
     return Scaffold(
       body: Stack(
         children: [
-          CachedNetworkImage(
-            imageUrl: loginUrlImage,
-            placeholder: (context, url) => Image.asset(
-              'assets/images/wallpaper.jpg',
-              fit: BoxFit.fill,
-            ),
-            errorWidget: (context, url, error) => const Icon(Icons.error),
-            width: double.infinity,
-            height: double.infinity,
-            fit: BoxFit.cover,
-            alignment: FractionalOffset(_animation.value, 0),
-          ),
+          // CachedNetworkImage(
+          //   imageUrl: loginUrlImage,
+          //   placeholder: (context, url) => Image.asset(
+          //     'assets/images/wallpaper.jpg',
+          //     fit: BoxFit.fill,
+          //   ),
+          //   errorWidget: (context, url, error) => const Icon(Icons.error),
+          //   width: double.infinity,
+          //   height: double.infinity,
+          //   fit: BoxFit.cover,
+          //   alignment: FractionalOffset(_animation.value, 0),
+          // ),
           Container(
             color: Colors.black54,
             child: Padding(

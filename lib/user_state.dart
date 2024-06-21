@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'Home/homepage.dart';
 import 'LoginPage/login_screen.dart';
+import 'Services/global_variables.dart';
 
 class UserState extends StatelessWidget {
 
@@ -20,7 +21,9 @@ class UserState extends StatelessWidget {
         else if(userSnapshot.hasData)
         {
           print('user is already logged in yet');
-          return Screen();
+          //return Screen();
+          isLogin = true;
+          return HomePage();
         }
 
         else if(userSnapshot.hasError)

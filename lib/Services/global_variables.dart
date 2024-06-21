@@ -4,3 +4,4 @@ String forgetUrlImage = 'https://images.pexels.com/photos/9578527/pexels-photo-9
 String? name = '';
 String? userImage = '';
 String? location = '';
+bool isLogin = false;
