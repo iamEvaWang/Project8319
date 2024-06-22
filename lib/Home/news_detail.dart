@@ -4,20 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class NewsDetailView extends StatefulWidget {
-  final String url;
-  final String title;
+  final Map? arguments;
 
-  NewsDetailView(this.url, this.title);
+  const NewsDetailView( {super.key, this.arguments} );
 
   @override
   State<NewsDetailView>  createState() =>
-      _NewsDetailViewState(this.url, this.title);
+      _NewsDetailViewState();
 }
 
 class _NewsDetailViewState extends State<NewsDetailView> {
-  _NewsDetailViewState(this.url, this.title);
-  final String url;
-  final String title;
+  _NewsDetailViewState();
+  late String url;
 
   late final WebViewController wvCtrl;
   double height = 0;
@@ -26,22 +24,26 @@ class _NewsDetailViewState extends State<NewsDetailView> {
   @override
   void initState() {
     super.initState();
-    wvCtrl = WebViewController()
-    ..setJavaScriptMode(JavaScriptMode.unrestricted)
-    ..loadRequest(Uri.parse(url));
+    url = widget.arguments!=null  ? widget.arguments!['webUrl']: '';
+    if(url!='') {
+      wvCtrl = WebViewController()
+        ..setJavaScriptMode(JavaScriptMode.unrestricted)
+        ..loadRequest(Uri.parse(url));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.grey[100],
         appBar: AppBar(
-          title: Text(this.title),
+          title: const Text('News'),
         ),
         body: Column(children: [
           Expanded(
-              child: WebViewWidget(
-                controller: wvCtrl,
-              )
+              child: url==''
+                  ? Text('URL Error!')
+                  : WebViewWidget(controller: wvCtrl)
           )
         ])
     );
