@@ -3,50 +3,40 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:lettersub_mobile_application/Services/global_variables.dart';
-import 'package:lettersub_mobile_application/route.dart';
+import 'package:lettersub_mobile_application/Services/show_goto_login_dialog.dart';
 import '../user_state.dart';
-import 'news_detail.dart';
-import 'newsletter_model.dart';
+import 'bookmarks_page.dart';
+import 'news_list.dart';
+
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
 
   @override
-  State<HomePage> createState() => _ScreenState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _ScreenState extends State<HomePage> {
+class _HomePageState extends State<HomePage> {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _db = FirebaseFirestore.instance;
-  late List<NewsletterModel> _news=[];
+
+  int _selectedIndex = 0;
+  final List<BottomNavigationBarItem> _bottomNavItems = const [
+          BottomNavigationBarItem(icon: Icon(Icons.home,), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
+          BottomNavigationBarItem(icon: Icon(Icons.notifications), label: 'Subscript'),
+          BottomNavigationBarItem(icon: Icon(Icons.bookmarks), label: 'Bookmarks'),
+          BottomNavigationBarItem(icon: Icon(Icons.person ), label: 'About me'),];
+
+  final List<Widget> _bottomNavPages = const  [NewsList(),NewsList(),NewsList(),BookmarksPage(),BookmarksPage(),];
 
   @override
   void initState() {
     super.initState();
-    final newsletters = _db.collection('newsletters');
-    newsletters.get().then((querySnapshot){
-      for(var doc in querySnapshot.docs){
-        _news.add(NewsletterModel.fromFirestore(doc));
-        //_news.add('News id: ${doc.id}');
-      }
-      setState(() {});
-    });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.grey[100],
-        appBar: AppBar(
-        title: const Text('Homepage'),
-        actions: [ isLogin
-                      ? IconButton(onPressed:()=> _onSignoutClick(context), icon: Icon(Icons.logout))
-                      : IconButton(onPressed:()=> _onLoginClick(context), icon: Icon(Icons.person) )]),
-      body:_buildBody(context),
-    );
-  }
-
-  void _onSignoutClick(BuildContext context){
+  void _onLogoutClick(BuildContext context){
     _auth.signOut();
     Navigator.canPop(context) ? Navigator.pop(context) : null;
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => UserState()));
@@ -58,39 +48,43 @@ class _ScreenState extends State<HomePage> {
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => UserState()));
   }
 
-  Widget _buildBody(BuildContext context){
-    return Container(
-      width: double.infinity,
-      height: double.infinity ,
-      padding: const EdgeInsets.all(4),
-      child: Column(children: [
-        Expanded(child:    ListView.builder(itemBuilder:(context,index){
-          NewsletterModel newsletter = _news.elementAt(index);
-          return GestureDetector(
-              onTap:(){
-                Navigator.pushNamed(context, RouterTable.newsDetailPage, arguments: {'webUrl': newsletter.webUrl!}  );
-              },
-          child: Card(
-            color: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 256,
-                    child:  Image.network(newsletter.image!),
-                  ),
-                  Text(newsletter.name! ,style:TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
-                  Text(newsletter.description!),
-                  Text(newsletter.date! , style: TextStyle(color: Colors.grey ),),
-                ],
-              )
-            ),
-          ) );
-        },
-        itemCount: _news.length,))
-    ],),);
+  void _onItemTapped(BuildContext context,int index) {
+    if(index > 2 ){
+      if(!isLogin) {
+       showGotoLoginDialog(context).then((val) {
+          if (val) {
+            _onLoginClick(context);
+          }
+        });
+       return;
+      }
+    }
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.grey[100],
+      appBar: AppBar(
+        //backgroundColor: Colors.red[300],
+        title: const Center(child: Text('LetterSub')),
+        actions: [ isLogin
+          ? IconButton(onPressed:()=> _onLogoutClick(context), icon: Icon(Icons.logout))
+          : IconButton(onPressed:()=> _onLoginClick(context), icon: Icon(Icons.person) )
+        ]),
+      bottomNavigationBar: BottomNavigationBar(
+        items:_bottomNavItems,
+        currentIndex: _selectedIndex,
+        unselectedItemColor: Colors.black,
+        selectedItemColor: Colors.red[300],
+        onTap: (index) => _onItemTapped(context,index),
+      ),
+      body:_bottomNavPages[_selectedIndex],
+    );
   }
 
 }
+

@@ -9,6 +9,7 @@ class UserState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    isLogin = false;
     return StreamBuilder(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (ctx, userSnapshot)

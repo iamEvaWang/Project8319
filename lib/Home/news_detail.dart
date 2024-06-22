@@ -4,9 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class NewsDetailView extends StatefulWidget {
-  final Map? arguments;
+  const NewsDetailView({super.key});
 
-  const NewsDetailView( {super.key, this.arguments} );
 
   @override
   State<NewsDetailView>  createState() =>
@@ -15,29 +14,28 @@ class NewsDetailView extends StatefulWidget {
 
 class _NewsDetailViewState extends State<NewsDetailView> {
   _NewsDetailViewState();
-  late String url;
+  String url='';
 
   late final WebViewController wvCtrl;
-  double height = 0;
-
-
-  @override
-  void initState() {
-    super.initState();
-    url = widget.arguments!=null  ? widget.arguments!['webUrl']: '';
-    if(url!='') {
-      wvCtrl = WebViewController()
-        ..setJavaScriptMode(JavaScriptMode.unrestricted)
-        ..loadRequest(Uri.parse(url));
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
+    // get arguments
+    dynamic args = ModalRoute.of(context)!.settings.arguments;
+    if (args !=null ) {
+      url = args['webUrl'];
+      if (url.isNotEmpty ) {
+        wvCtrl = WebViewController()
+          ..setJavaScriptMode(JavaScriptMode.unrestricted)
+          ..loadRequest(Uri.parse(url));
+      }
+    }
+
     return Scaffold(
         backgroundColor: Colors.grey[100],
         appBar: AppBar(
-          title: const Text('News'),
+          backgroundColor: Colors.red[300],
+          title: const Text('LetterSub'),
         ),
         body: Column(children: [
           Expanded(

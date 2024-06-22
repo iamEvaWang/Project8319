@@ -24,9 +24,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       //home: UserState(),
-      //routes: RouterTable.routeTables,
+      routes: RouterTable.routeTables,
       initialRoute: RouterTable.homePage,
-      onGenerateRoute: RouterTable.onGenerateRoute,
     );
   }
 }

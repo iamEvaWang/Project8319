@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class NewsletterModel{
-    final int? id;
+    final String? id;
     final String? author;
     final String? name;
     final String? image;
@@ -12,6 +12,7 @@ class NewsletterModel{
     final String? description;
     final String? webUrl;
     final List<String>? tags;
+    bool isBookmark= false;
 
     NewsletterModel({
       this.id,
