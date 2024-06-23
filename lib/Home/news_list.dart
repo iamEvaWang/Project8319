@@ -117,7 +117,7 @@ class _NewsListState extends State<NewsList> {
                                       });
                                     }
                                   },
-                                  icon:   newsletter.isBookmark? Icon(Icons.bookmark , color:Colors.red, ): Icon(Icons.bookmark_border ))
+                                  icon:   newsletter.isBookmark? Icon(Icons.bookmark , color:Colors.black, ): Icon(Icons.bookmark_border ))
                             ]),
                       ],
                     )

@@ -28,16 +28,22 @@ class BookmarkService{
     User? user = _auth.currentUser;
     if (user != null){
       DocumentSnapshot userDoc = await _firestore.collection('users').doc(user.uid).get() ;
-      List<dynamic> bookmarks = userDoc['bookmarks']??[];
-      return bookmarks.map((bookmark) =>{
-        'docId': bookmark['docId'],
-        'title': bookmark['title'],
-        'author': bookmark['author'],
-        'date': bookmark['date'],
-        'url': bookmark['url'],
-        'createAt': bookmark['createAt'],
-      }).toList();
-    }else{
+
+      try {
+        List<dynamic> bookmarks = userDoc['bookmarks']??[];
+        return bookmarks.map((bookmark) =>{
+          'docId': bookmark['docId'],
+          'title': bookmark['title'],
+          'author': bookmark['author'],
+          'date': bookmark['date'],
+          'url': bookmark['url'],
+          'createAt': bookmark['createAt'],
+        }).toList();
+      } on StateError catch (e, s) {
+        await _initBookmarks();
+        return [];
+      }
+  }else{
       throw Exception('No user is signed in');
     }
   }
@@ -55,4 +61,9 @@ class BookmarkService{
     }
   }
 
+  Future<void> _initBookmarks() async{
+    await addBookmark("Doc000000", 'doc_initialization', 'system', 'now', 'https://firebase.google.com/');
+    await deleteBookmark('Doc000000');
+  }
+  
 }
